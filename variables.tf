@@ -6,7 +6,7 @@ variable "ndo_adm_username" {
 variable "ndo_adm_password" {
   type = string
 }
-variable "adm_url" {
+variable "ndo_adm_url" {
   type = string
   default = "https://198.19.225.163"
 }
