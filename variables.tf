@@ -1,9 +1,9 @@
 
 #### PROVIDER VARIABLES (LOGIN) #####
-variable "adm_username" {
+variable "ndo_adm_username" {
   type = string
 }
-variable "adm_password" {
+variable "ndo_adm_password" {
   type = string
 }
 variable "adm_url" {
