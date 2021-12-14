@@ -2,15 +2,13 @@
 #### PROVIDER VARIABLES (LOGIN) #####
 variable "adm_username" {
   type = string
-  #default = "admin"
 }
 variable "adm_password" {
   type = string
-  #default = "C1sco12345"
 }
 variable "adm_url" {
   type = string
-  default = "https://ase1.svpod.dc-03.com:8443"
+  default = "https://198.19.225.163"
 }
 
 
