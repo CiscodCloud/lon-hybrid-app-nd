@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "mso" {
-  username = var.adm_username
-  password = var.adm_password
-  url      = var.adm_url
+  username = var.ndo_adm_username
+  password = var.ndo_adm_password
+  url      = var.ndo_adm_url
   domain   = "local"
   insecure = true
   platform = "nd"
