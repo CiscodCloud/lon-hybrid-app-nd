@@ -265,6 +265,9 @@ resource "mso_schema_template_external_epg_contract" "r_extepgcn_inetacc_p" {
 }
 
 ###-------SSH PUBLISH----------###
+
+
+/*
 resource "mso_schema_template_anp_epg_contract" "r_epgcn_web_sshpub_p" {
     anp_name               = mso_schema_template_anp.r_anp_new_app.name
     contract_name          = var.infra_contract_name_ssh_publish
@@ -295,6 +298,8 @@ resource "mso_schema_template_external_epg_contract" "r_extepgcn_sshpub_c" {
   external_epg_name        = mso_schema_template_external_epg.r_extepg_new_app_cloud.external_epg_name
   relationship_type        = "consumer"
 }
+*/
+    
 
 ###-------WEB PUBLISH----------###
 
