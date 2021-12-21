@@ -71,9 +71,8 @@ resource "mso_schema_template_external_epg" "r_extepg_new_app_cloud" {
     display_name               = "tf-extepg-${var.name_new_app}${random_integer.r_rnd_appid.id}"
     external_epg_name          = "tf-extepg-${var.name_new_app}${random_integer.r_rnd_appid.id}"
     external_epg_type          = "cloud"
-    site_id                    = [var.infra_site_id_dcloud_aws]
-    selector_name             = "tf-extepgsel-${var.name_new_app}${random_integer.r_rnd_appid.id}"
-    selector_ip               = "0.0.0.0/0"
+    selector_name              = "tf-extepgsel-${var.name_new_app}${random_integer.r_rnd_appid.id}"
+    selector_ip                = "0.0.0.0/0"
     include_in_preferred_group = false
     schema_id                  = mso_schema.r_schm_new_app.id
     template_name              = mso_schema_template.r_tmpl_new_app.name
