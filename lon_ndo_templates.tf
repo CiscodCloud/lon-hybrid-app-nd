@@ -364,3 +364,24 @@ resource "mso_schema_site_anp_epg_domain" "r_epgvmm_db_lon_60" {
     depends_on = [mso_schema_site.r_schema_site_new_app_lon,
   ]
 }
+
+resource "mso_schema_template_deploy" "r_deploy_tmpl_to_site_lon" {
+  schema_id = mso_schema.r_schm_new_app.id
+  template_name = mso_schema_template.r_tmpl_new_app.name
+  site_id = var.infra_site_id_dcloud_lon
+  undeploy = false
+  depends_on = [mso_schema_site.r_schema_site_new_app_lon,
+
+  ]
+}
+
+
+resource "mso_schema_template_deploy" "r_deploy_tmpl_to_site_aws" {
+  schema_id = mso_schema.r_schm_new_app.id
+  template_name = mso_schema_template.r_tmpl_new_app.name
+  site_id = var.infra_site_id_dcloud_aws
+  undeploy = false
+  depends_on = [mso_schema_site.r_schema_site_new_app_aws,
+                mso_schema_template_deploy.r_deploy_tmpl_to_site_lon,
+  ]
+}
