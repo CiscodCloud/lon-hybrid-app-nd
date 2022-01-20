@@ -370,18 +370,42 @@ resource "mso_schema_template_deploy" "r_deploy_tmpl_to_site_lon" {
   template_name = mso_schema_template.r_tmpl_new_app.name
   site_id = var.infra_site_id_dcloud_lon
   undeploy = false
-  depends_on = [mso_schema_site.r_schema_site_new_app_lon,
-
+  depends_on = [
+                mso_schema.r_schm_new_app,
+                mso_schema_site.r_schema_site_new_app_aws,
+                mso_schema_site.r_schema_site_new_app_lon,
+                mso_schema_site_anp_epg_domain.r_epgvmm_db_lon_60,
+                mso_schema_site_anp_epg_domain.r_epgvmm_web_lon_60,
+                mso_schema_template.r_tmpl_new_app,
+                mso_schema_template_anp.r_anp_new_app,
+                mso_schema_template_anp_epg.r_epg_new_app_db,
+                mso_schema_template_anp_epg.r_epg_new_app_web,
+                mso_schema_template_anp_epg_selector.r_epgsel_new_app_web,
+                mso_schema_template_external_epg.r_extepg_new_app_cloud,
+                mso_schema_template_external_epg_contract.r_extepgcn_icmp_p,
+                mso_schema_template_external_epg_contract.r_extepgcn_inetacc_p,
+                mso_schema_template_external_epg_contract.r_extepgcn_webpub_c,
+                mso_schema_template_contract.r_cn_new_app_db,
+                mso_schema_template_filter_entry.r_flt_new_app_db_3306,
+                mso_schema_template_anp_epg_contract.r_epgcn_db_db_p,
+                mso_schema_template_anp_epg_contract.r_epgcn_db_icmp_c,
+                mso_schema_template_anp_epg_contract.r_epgcn_db_icmp_p,
+                mso_schema_template_anp_epg_contract.r_epgcn_db_inetacc_c,
+                mso_schema_template_anp_epg_contract.r_epgcn_db_onpremsrv_p,
+                mso_schema_template_anp_epg_contract.r_epgcn_web_db_c,
+                mso_schema_template_anp_epg_contract.r_epgcn_web_icmp_c,
+                mso_schema_template_anp_epg_contract.r_epgcn_web_icmp_p,
+                mso_schema_template_anp_epg_contract.r_epgcn_web_inetacc_c,
+                mso_schema_template_anp_epg_contract.r_epgcn_web_onpremsrv_p,
+                mso_schema_template_anp_epg_contract.r_epgcn_web_webpub_p,
   ]
 }
-
 
 resource "mso_schema_template_deploy" "r_deploy_tmpl_to_site_aws" {
   schema_id = mso_schema.r_schm_new_app.id
   template_name = mso_schema_template.r_tmpl_new_app.name
   site_id = var.infra_site_id_dcloud_aws
   undeploy = false
-  depends_on = [mso_schema_site.r_schema_site_new_app_aws,
-                mso_schema_template_deploy.r_deploy_tmpl_to_site_lon,
+  depends_on = [ mso_schema_template_deploy.r_deploy_tmpl_to_site_lon,
   ]
 }
