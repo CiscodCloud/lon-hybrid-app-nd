@@ -34,7 +34,7 @@ resource "mso_schema_template_anp_epg_selector" "r_epgsel_new_app_web" {
     epg_name                   = mso_schema_template_anp_epg.r_epg_new_app_web.name
     name                       = "tf-epgsel-${var.name_new_app}${random_integer.r_rnd_appid.id}-web"
     expressions {
-        key         = "Custom:NAME"
+        key         = "Custom:Name"
         operator    = "equals"
         value       = var.name_new_app_web_server
     }
