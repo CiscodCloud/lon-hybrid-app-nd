@@ -1,5 +1,3 @@
-
-
 ### CREATE APPLICATION PROFILES ###
 resource "mso_schema_template_anp" "r_anp_new_app" {
     display_name = "tf-anp-${var.name_new_app}${random_integer.r_rnd_appid.id}"
@@ -36,7 +34,7 @@ resource "mso_schema_template_anp_epg_selector" "r_epgsel_new_app_web" {
     epg_name                   = mso_schema_template_anp_epg.r_epg_new_app_web.name
     name                       = "tf-epgsel-${var.name_new_app}${random_integer.r_rnd_appid.id}-web"
     expressions {
-        key         = "Custom:Name"
+        key         = "Custom:NAME"
         operator    = "equals"
         value       = var.name_new_app_web_server
     }
@@ -71,16 +69,16 @@ resource "mso_schema_template_external_epg" "r_extepg_new_app_cloud" {
     display_name               = "tf-extepg-${var.name_new_app}${random_integer.r_rnd_appid.id}"
     external_epg_name          = "tf-extepg-${var.name_new_app}${random_integer.r_rnd_appid.id}"
     external_epg_type          = "cloud"
-    selector_name              = "tf-extepgsel-${var.name_new_app}${random_integer.r_rnd_appid.id}"
-    selector_ip                = "0.0.0.0/0"
+    #site_id                    = [var.infra_site_id_dcloud_aws]
+    selector_name             = "tf-extepgsel-${var.name_new_app}${random_integer.r_rnd_appid.id}"
+    selector_ip               = "0.0.0.0/0"
     include_in_preferred_group = false
     schema_id                  = mso_schema.r_schm_new_app.id
     template_name              = mso_schema_template.r_tmpl_new_app.name
     vrf_name                   = var.infra_vrf_name_stretch_vrf
     vrf_schema_id              = var.infra_schema_id_hybrid_apps 
     vrf_template_name          = var.infra_template_name_shared
-    depends_on = [mso_schema_site.r_schema_site_new_app_aws,
-  ]
+
 }
 
 
@@ -102,7 +100,7 @@ resource "mso_schema_template_contract" "r_cn_new_app_db" {
         filter_schema_id     = mso_schema.r_schm_new_app.id
         filter_template_name = mso_schema_template.r_tmpl_new_app.name
     }
-   # filter_type          = "bothWay"
+   
 }
 
 
@@ -264,8 +262,6 @@ resource "mso_schema_template_external_epg_contract" "r_extepgcn_inetacc_p" {
 }
 
 ###-------SSH PUBLISH----------###
-
-
 /*
 resource "mso_schema_template_anp_epg_contract" "r_epgcn_web_sshpub_p" {
     anp_name               = mso_schema_template_anp.r_anp_new_app.name
@@ -297,8 +293,8 @@ resource "mso_schema_template_external_epg_contract" "r_extepgcn_sshpub_c" {
   external_epg_name        = mso_schema_template_external_epg.r_extepg_new_app_cloud.external_epg_name
   relationship_type        = "consumer"
 }
+
 */
-    
 
 ###-------WEB PUBLISH----------###
 
@@ -365,6 +361,8 @@ resource "mso_schema_site_anp_epg_domain" "r_epgvmm_db_lon_60" {
   ]
 }
 
+
+
 resource "mso_schema_template_deploy" "r_deploy_tmpl_to_site_lon" {
   schema_id = mso_schema.r_schm_new_app.id
   template_name = mso_schema_template.r_tmpl_new_app.name
@@ -398,8 +396,10 @@ resource "mso_schema_template_deploy" "r_deploy_tmpl_to_site_lon" {
                 mso_schema_template_anp_epg_contract.r_epgcn_web_inetacc_c,
                 mso_schema_template_anp_epg_contract.r_epgcn_web_onpremsrv_p,
                 mso_schema_template_anp_epg_contract.r_epgcn_web_webpub_p,
+
   ]
 }
+
 
 resource "mso_schema_template_deploy" "r_deploy_tmpl_to_site_aws" {
   schema_id = mso_schema.r_schm_new_app.id
@@ -407,5 +407,6 @@ resource "mso_schema_template_deploy" "r_deploy_tmpl_to_site_aws" {
   site_id = var.infra_site_id_dcloud_aws
   undeploy = false
   depends_on = [ mso_schema_template_deploy.r_deploy_tmpl_to_site_lon,
+
   ]
 }
