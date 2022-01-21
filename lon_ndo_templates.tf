@@ -39,6 +39,7 @@ resource "mso_schema_template_anp_epg_selector" "r_epgsel_new_app_web" {
         value       = var.name_new_app_web_server
     }
 }
+
 resource "mso_schema_template_anp_epg" "r_epg_new_app_db" {
     schema_id                  = mso_schema.r_schm_new_app.id
     template_name              = mso_schema_template.r_tmpl_new_app.name
