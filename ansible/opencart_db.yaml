@@ -1,0 +1,51 @@
+---
+- name: MariaDB
+  hosts: localhost
+  gather_facts: true
+  become: true
+  vars:
+    mysql_root_password: "{{ mysql_root_password }}"
+    mysql_ocuser_password: "{{ mysql_ocuser_password }}"
+  tasks:
+    - name: install mariadb
+      yum:
+        name:
+          - mariadb-server
+          - MySQL-python
+        state: latest
+    - name: start mariadb
+      service:
+        name: mariadb
+        enabled: true
+        state: started
+    - name: mysql_root_password
+      mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        user: root
+        check_implicit_admin: true
+        password: "{{ mysql_root_password }}"
+        host: localhost
+    - name: Create a new database called opencart
+      mysql_db:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        name: opencart
+        state: present
+    - name: Configure new MySQL user called ocuser
+      mysql_user:
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        user: ocuser
+        check_implicit_admin: true
+        password: "{{ mysql_root_password }}"
+        priv: "ocuser.*:ALL"
+        host: "100.%"
+    - name: Grant permissions to ocuser
+      command: mysql -u root -p'{{ mysql_root_password }}' -h localhost -e "GRANT ALL ON *.* to 'ocuser'@'100.%';"
+    - name: Update iptables  
+      command:  iptables -I INPUT 1 -s 0.0.0.0/0 -j ACCEPT
+    - name: Save iptables  
+      command:  iptables-save
+    # - name: Grant permissions to ocuser
+    #   command: mysql -u root -p'{{ mysql_root_password }}' -h localhost -e "GRANT ALL ON *.* to 'ocuser'@'100.%' IDENTIFIED BY '{{ mysql_ocuser_password }}';"

@@ -1,0 +1,126 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: installed
+
+    - name: Install php 7.1
+      become: true
+      yum:
+        state: installed
+        name:
+          - php
+          - php-mysql
+          - php-cli
+          - php-common
+          - php-mcrypt
+          - curl
+          - zlib
+          - php-gd
+          - php-mbstring
+          - php-xml
+          - zip
+          - unzip
+
+    - name: Download and Extract Opencart
+      unarchive:
+        src: https://github.com/opencart/opencart/releases/download/2.3.0.2/2.3.0.2-compiled.zip
+        dest: /var/www/html
+        remote_src: yes
+
+    - name: Copy sample config file
+      command: cp -p /var/www/html/upload/config-dist.php /var/www/html/upload/config.php
+
+    - name: Copy sample config file
+      command: cp -p /var/www/html/upload/admin/config-dist.php /var/www/html/upload/admin/config.php
+
+    - name: Move upoload directory to opencart
+      command: mv /var/www/html/upload /var/www/html/opencart
+
+    # - name: Update Opencart config file
+    #   lineinfile:
+    #     path: /var/www/html/Opencart/wp-config.php
+    #     regexp: "{{item.regexp}}"
+    #     line: "{{item.line}}"
+    #   with_items:
+    #     - {'regexp': "define\\( 'DB_NAME',(.)+\\);", 'line': "define( 'DB_NAME', 'Opencart' );"}
+    #     - {'regexp': "define\\( 'DB_USER',(.)+\\);", 'line': "define( 'DB_USER', 'wpuser' );"}
+    #     - {'regexp': "define\\( 'DB_PASSWORD',(.)+\\);", 'line': "define( 'DB_PASSWORD', 'cisco' );"}
+
+    - name: Update ownership to Apache user
+      file:
+        path: /var/www/html/opencart/
+        state: directory
+        recurse: yes
+        owner: apache
+        group: apache
+
+    - name: Set the correct permissions on Opencart directories
+      command: find /var/www/html/opencart/system/storage/cache/ -type d -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions on Opencart directories
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/system/storage/cache
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/system/storage/logs/ -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/system/storage/logs
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/system/storage/download/ -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/system/storage/download
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/system/storage/upload/ -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/system/storage/upload
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/system/storage/modification/ -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/system/storage/modification
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/image/ -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/image
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/image/cache/ -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/image/cache
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/image/catalog/ -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/image/catalog
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/config.php -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/config.php
+
+    - name: Set the correct permissions for Opencart files
+      command: find /var/www/html/opencart/admin/config.php -type f -exec chmod 0755 {} \;
+
+    - name: Set the correct permissions for Opencart files
+      command: chcon -R -t httpd_sys_rw_content_t /var/www/html/opencart/admin/config.php
+
+    - name: set http network connect
+      command: setsebool -P httpd_can_network_connect=1
+
+    - name: start service
+      service:
+        name: httpd
+        state: started
