@@ -17,7 +17,7 @@ resource "aws_instance" "webserver" {
 }
 resource "null_resource" "oc_init" {
   
-  depends_on = [aws_instance.webserver]
+  depends_on = [aws_instance.webserver, null_resource.db_init]
 
   provisioner "file" {
     source      = "ansible/"
